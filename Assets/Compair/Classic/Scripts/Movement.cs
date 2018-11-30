@@ -8,11 +8,11 @@ public class Movement : MonoBehaviour {
 	void Update ()
 	{
 		Vector3 pos = transform.position;
-		pos += transform.forward * GameManager.GM.charSpeed * Time.deltaTime;
+		pos += transform.forward * ClassicGameManager.GM.charSpeed * Time.deltaTime;
 
-		if (pos.x < GameManager.GM.leftBound)
+		if (pos.x < ClassicGameManager.GM.leftBound)
 		{
-			pos.x = GameManager.GM.rightBound;
+			pos.x = ClassicGameManager.GM.rightBound;
 		}
 
 		transform.position = pos;

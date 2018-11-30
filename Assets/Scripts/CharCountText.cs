@@ -12,4 +12,5 @@ public class CharCountText : MonoBehaviour
 	{
 		Text.text = ""+charCount;
 	}
+	
 }

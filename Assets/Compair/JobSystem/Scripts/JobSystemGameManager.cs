@@ -1,13 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Jobs;
 using Random = UnityEngine.Random;
 
-public class GameManager : MonoBehaviour
+public class JobSystemGameManager : MonoBehaviour
 {
 
-	public static GameManager GM;
+	public static JobSystemGameManager GM;
 
 	public CharCountText CharCountText;
 
@@ -27,26 +29,56 @@ public class GameManager : MonoBehaviour
 
 	public int CurrentCount;
 
+	private TransformAccessArray _transforms;
+	private MovementJob _movementJob;
+	private JobHandle _moveHandle;
+
 	private void Awake()
 	{
 		GM = this;
 	}
 
+	private void OnDisable()
+	{
+		_moveHandle.Complete();
+		_transforms.Dispose();
+	}
+
 	private void Start()
 	{
+		_transforms = new TransformAccessArray(0, -1);
+		
 		AddChar(charCount);
 	}
 
 	private void Update()
 	{
+		_moveHandle.Complete();
+		
 		if (Input.GetKeyDown("space"))
 		{
 			AddChar(charIncremement);
 		}
+
+		_movementJob = new MovementJob()
+		{
+			moveSpeed = charSpeed,
+			leftBound = leftBound,
+			rightBound = rightBound,
+			deltaTime = Time.deltaTime
+		};
+
+		_moveHandle = _movementJob.Schedule(_transforms);
+		
+		JobHandle.ScheduleBatchedJobs();
 	}
 
 	private void AddChar(int amount)
 	{
+		_moveHandle.Complete();
+
+		_transforms.capacity = _transforms.length + amount;
+		
 		for (int i = 0; i < amount; i++)
 		{
 			float x = Random.Range(leftBound, rightBound);
@@ -56,6 +88,8 @@ public class GameManager : MonoBehaviour
 
 			var obj = Instantiate(charPrefab) as GameObject;
 			obj.transform.position = pos;
+			
+			_transforms.Add(obj.transform);
 		}
 
 		CurrentCount += amount;
