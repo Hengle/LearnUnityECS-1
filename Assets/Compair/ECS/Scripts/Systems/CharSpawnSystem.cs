@@ -5,6 +5,10 @@ using Unity.Transforms;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+public class CharSpawnBarrier : BarrierSystem
+{
+}
+
 public class CharSpawnSystem : ComponentSystem
 {
     #pragma warning disable 649
@@ -18,6 +22,7 @@ public class CharSpawnSystem : ComponentSystem
     #pragma warning restore 649
 
     [Inject] Group _group;
+    [Inject] CharSpawnBarrier _barrier;
     
     protected override void OnUpdate()
     {
@@ -52,6 +57,7 @@ public class CharSpawnSystem : ComponentSystem
             entities.Dispose();
             positions.Dispose();
             
+//            _barrier.CreateCommandBuffer().DestroyEntity(spawnerEntity);
             EntityManager.RemoveComponent<CharSpawner>(spawnerEntity);
             UpdateInjectedComponentGroups();
         }
