@@ -14,13 +14,21 @@ public class CharMoveSystem : JobComponentSystem
         public ComponentDataArray<Position> Positions;
         public float DeltaTime;
         public float3 MoveSpeed;
+        public float xMin;
+        public float xMax;
         
         public void Execute(int i)
         {
-            Positions[i] = new Position()
+            var newPosition = new Position
             {
                 Value = Positions[i].Value + MoveSpeed * DeltaTime
             };
+            if (newPosition.Value.x <= xMin)
+            {
+                newPosition.Value.x = xMax;
+            }
+            
+            Positions[i] = newPosition;
         }
     }
 
@@ -34,11 +42,14 @@ public class CharMoveSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
+        var settings = Settings.Instance;
         var moveJob = new Move
         {
             Positions = _charGroup.GetComponentDataArray<Position>(),
             DeltaTime = Time.deltaTime,
-            MoveSpeed = Settings.Instance.CharMoveSpeed
+            MoveSpeed = settings.CharMoveSpeed,
+            xMin = settings.Boundary.xMin,
+            xMax = settings.Boundary.xMax
         };
         var moveJobHandle = moveJob.Schedule(_charGroup.CalculateLength(),
             64, inputDeps);
