@@ -283,7 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SerializedData:
     Prefab: {fileID: 1861647323855916, guid: 602cc697adba894498c6eb5787ae2ae7, type: 2}
-    Count: 4000
+    Count: 800
 --- !u!1 &342631998
 GameObject:
   m_ObjectHideFlags: 0

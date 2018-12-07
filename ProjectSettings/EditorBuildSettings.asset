@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Compair/Classic/Scenes/Classic.unity
     guid: 759e597b2150a154a89adaa29c117a7e
   - enabled: 0
     path: Assets/Compair/JobSystem/Scenes/JobSystem.unity
     guid: df82a2faffa29d9419375ead689b4232
-  - enabled: 0
+  - enabled: 1
     path: Assets/Compair/ECS/Scenes/ECS.unity
     guid: 0f4cb3b7b745087478fa27eca4d59cf1
   m_configObjects: {}

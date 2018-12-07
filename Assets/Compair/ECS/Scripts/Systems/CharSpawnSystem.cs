@@ -34,28 +34,15 @@ public class CharSpawnSystem : ComponentSystem
             //获取散布范围
             var boundary = Settings.Instance.Boundary;
             
-            //为产生角色分配空间
-            var entities = new NativeArray<Entity>(spawner.Count, Allocator.Temp);
             //生成新角色
-            EntityManager.Instantiate(spawner.Prefab, entities);
-            
-            //分散位置
-            var positions = new NativeArray<float3>(spawner.Count, Allocator.Temp);
-            for (var i = 0; i < spawner.Count; i++)
+            for (int i = 0; i < spawner.Count; i++)
             {
-                positions[i] = new float3(
+                var newChar = Object.Instantiate(spawner.Prefab);
+                var pos = newChar.GetComponent<PositionHybrid>();
+                pos.Value = new float3(
                     Random.Range(boundary.xMin, boundary.xMax), 0.0f,
                     Random.Range(boundary.yMin, boundary.yMax));
             }
-            
-            for (var i = 0; i < spawner.Count; i++)
-            {
-                EntityManager.SetComponentData(entities[i], 
-                    new Position{Value = positions[i]});
-            }
-            
-            entities.Dispose();
-            positions.Dispose();
             
 //            _barrier.CreateCommandBuffer().DestroyEntity(spawnerEntity);
             EntityManager.RemoveComponent<CharSpawner>(spawnerEntity);

@@ -8,10 +8,9 @@ using UnityEngine;
 
 public class CharMoveSystem : JobComponentSystem
 {
-    [BurstCompile]
     struct Move : IJobParallelFor
     {
-        public ComponentDataArray<Position> Positions;
+        public ComponentArray<PositionHybrid> Positions;
         public float DeltaTime;
         public float3 MoveSpeed;
         public float xMin;
@@ -19,16 +18,14 @@ public class CharMoveSystem : JobComponentSystem
         
         public void Execute(int i)
         {
-            var newPosition = new Position
+            var newPosition = new float3(
+                Positions[i].Value + MoveSpeed * DeltaTime);
+            if (newPosition.x <= xMin)
             {
-                Value = Positions[i].Value + MoveSpeed * DeltaTime
-            };
-            if (newPosition.Value.x <= xMin)
-            {
-                newPosition.Value.x = xMax;
+                newPosition.x = xMax;
             }
             
-            Positions[i] = newPosition;
+            Positions[i].Value = newPosition;
         }
     }
 
@@ -37,7 +34,7 @@ public class CharMoveSystem : JobComponentSystem
     protected override void OnCreateManager()
     {
         _charGroup = GetComponentGroup(ComponentType.ReadOnly<Char>(),
-            typeof(Position));
+            typeof(PositionHybrid));
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
@@ -45,7 +42,7 @@ public class CharMoveSystem : JobComponentSystem
         var settings = Settings.Instance;
         var moveJob = new Move
         {
-            Positions = _charGroup.GetComponentDataArray<Position>(),
+            Positions = _charGroup.GetComponentArray<PositionHybrid>(),
             DeltaTime = Time.deltaTime,
             MoveSpeed = settings.CharMoveSpeed,
             xMin = settings.Boundary.xMin,
