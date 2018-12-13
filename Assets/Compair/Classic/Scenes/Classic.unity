@@ -145,9 +145,9 @@ MonoBehaviour:
   bottomBound: -6
   leftBound: -6
   rightBound: 8
-  charPrefab: {fileID: 1536670758190220, guid: 66d53892d1e91ed4da77c58ff4601794, type: 2}
+  charPrefab: {fileID: 1780068473183422, guid: 850b5e2318d16a443a25f3602697e05b, type: 2}
   charSpeed: 1
-  charCount: 200
+  charCount: 1000
   charIncremement: 200
   CurrentCount: 0
 --- !u!4 &125866177

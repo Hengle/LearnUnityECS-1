@@ -1,11 +1,12 @@
 ﻿using Unity.Entities;
 using Unity.Collections;
+using Unity.Jobs;
 using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 using UnityEngine.Jobs;
 
-public class UpdateTransformPositionSystem : ComponentSystem
+public class UpdateTransformPositionSystem : JobComponentSystem
 {
     struct Data
     {
@@ -15,14 +16,24 @@ public class UpdateTransformPositionSystem : ComponentSystem
     }
 
     [Inject] Data _data;
-    
-    protected override void OnUpdate()
+
+    struct UpdatePosition : IJobParallelForTransform
     {
-        for (int i = 0; i < _data.Length; i++)
+        public ComponentArray<PositionHybrid> Positions;
+        public void Execute(int i, TransformAccess transform)
         {
-            var position = _data.Positions[i];
-            _data.Transforms[i].position = new float3(
-                position.Value.x, position.Value.y, position.Value.z);
+            transform.position = new float3(
+                Positions[i].Value.x, Positions[i].Value.y, Positions[i].Value.z);
         }
+    }
+    
+    protected override JobHandle OnUpdate(JobHandle inputDeps)
+    {
+        var job = new UpdatePosition()
+        {
+            Positions = _data.Positions
+        };
+
+        return job.Schedule(_data.Transforms, inputDeps);
     }
 }
