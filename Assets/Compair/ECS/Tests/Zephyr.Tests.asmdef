@@ -1,0 +1,19 @@
+{
+    "name": "Zephyr.Tests",
+    "references": [
+        "Unity.Entities",
+        "Unity.Mathematics",
+        "Unity.Transforms",
+        "Zephyr.LearnECS",
+        "Unity.Entities.Hybrid",
+        "Unity.Entities.Properties"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true
+}
