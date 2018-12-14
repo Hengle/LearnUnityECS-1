@@ -13,13 +13,9 @@ public class SpawnSystemTest : ECSTestBase
         
         ss.Update();
 
-        var entityManager = World.GetOrCreateManager<EntityManager>();
-        Assert.AreEqual(1, entityManager.GetAllEntities().Length);
-    }
-    
-    [TearDown]
-    public void TearDown() 
-    {
-       
+        var entities = entityManager.GetAllEntities();
+        Assert.AreEqual(1, entities.Length);
+        
+        entities.Dispose();
     }
 }
