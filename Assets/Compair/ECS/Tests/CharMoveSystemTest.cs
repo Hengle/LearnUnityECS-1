@@ -2,7 +2,7 @@
 using Unity.Entities;
 using Unity.Mathematics;
 
-public class CharMoveSystemTest
+public class CharMoveSystemTest : ECSTestBase
 {
 
     private EntityManager _entityManager;
