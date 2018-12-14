@@ -10,7 +10,7 @@ public struct Empty : IComponentData
     
 }
 
-public class SpawnSystem : ComponentSystem
+public class SpawnPureSystem : ComponentSystem
 {
     
     protected override void OnUpdate()
