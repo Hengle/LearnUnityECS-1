@@ -3,7 +3,6 @@
  */
 
 using Unity.Entities;
-using Unity.Jobs;
 
 public struct Empty : IComponentData
 {

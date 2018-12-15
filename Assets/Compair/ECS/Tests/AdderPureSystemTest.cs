@@ -11,7 +11,7 @@ public class AdderPureSystemTest : ECSTestBase
     {
         entityManager.CreateEntity(typeof(Adder));
         
-        AdderPureSystem system = World.GetOrCreateManager<AdderPureSystem>();
+        AddPureSystem system = World.GetOrCreateManager<AddPureSystem>();
         
         system.Update();
 

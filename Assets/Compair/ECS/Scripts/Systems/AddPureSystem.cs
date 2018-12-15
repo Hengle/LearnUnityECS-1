@@ -6,7 +6,7 @@ public struct Adder : IComponentData
     public int Value;
 }
 
-public class AdderPureSystem : ComponentSystem
+public class AddPureSystem : ComponentSystem
 {
     public ComponentGroup AdderGroup;
 
