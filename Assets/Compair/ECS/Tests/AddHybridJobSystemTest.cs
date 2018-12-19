@@ -4,7 +4,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class AdderPureJobSystemTest : ECSTestBase
+public class AddHybridJobSystemTest : ECSTestBase
 {
     
     [TestCase(100)]
@@ -12,14 +12,15 @@ public class AdderPureJobSystemTest : ECSTestBase
     {
         for (int i = 0; i < times; i++)
         {
-            entityManager.CreateEntity(typeof(Adder));
+            var go = new GameObject("test", typeof(AdderWraper));
         }
         
-        AddPureSystem system = World.GetOrCreateManager<AddPureSystem>();
+        AddJobSystem system = _world.GetOrCreateManager<AddJobSystem>();
         
         system.Update();
+        _entityManager.CompleteAllJobs();
 
-        var adderGroup = entityManager.CreateComponentGroup(typeof(Adder));
+        var adderGroup = _entityManager.CreateComponentGroup(typeof(Adder));
         var adders = adderGroup.GetComponentDataArray<Adder>();
         Assert.AreEqual(100, adders.Length);
         for (int i = 0; i < times; i++)
@@ -28,7 +29,9 @@ public class AdderPureJobSystemTest : ECSTestBase
         }
         
         system.Update();
+        _entityManager.CompleteAllJobs();
         
+        adders = adderGroup.GetComponentDataArray<Adder>();
         Assert.AreEqual(100, adders.Length);
         for (int i = 0; i < times; i++)
         {

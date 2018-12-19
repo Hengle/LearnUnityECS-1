@@ -2,9 +2,9 @@
 using Unity.Entities;
 using Unity.Jobs;
 
-public class AddPureJobSystem : JobComponentSystem
+public class AddJobSystem : JobComponentSystem
 {
-    public ComponentGroup AdderGroup;
+    private ComponentGroup _adderGroup;
 
     public struct AddJob : IJobParallelFor
     {
@@ -20,15 +20,15 @@ public class AddPureJobSystem : JobComponentSystem
     
     protected override void OnCreateManager()
     {
-        AdderGroup = GetComponentGroup(typeof(Adder));
+        _adderGroup = GetComponentGroup(typeof(Adder));
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         var job = new AddJob()
         {
-            Adders = AdderGroup.GetComponentDataArray<Adder>()
+            Adders = _adderGroup.GetComponentDataArray<Adder>()
         };
-        return job.Schedule(AdderGroup.CalculateLength(), 64, inputDeps);
+        return job.Schedule(_adderGroup.CalculateLength(), 64, inputDeps);
     }
 }

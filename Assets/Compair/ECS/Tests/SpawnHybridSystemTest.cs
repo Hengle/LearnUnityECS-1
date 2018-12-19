@@ -11,16 +11,16 @@ public class SpawnHybridSystemTest : ECSTestBase
     [Test]
     public void Spawn1Object()
     {
-        SpawnHybridSystem system = World.GetOrCreateManager<SpawnHybridSystem>();
+        SpawnHybridSystem system = _world.GetOrCreateManager<SpawnHybridSystem>();
         
         system.Update();
 
         //由混合系统创建的GameObject由于具有GameObjectEntity组件
         //确实会自动被加入到EntityManager的监视中
-        _entities = entityManager.GetAllEntities();
+        _entities = _entityManager.GetAllEntities();
         Assert.AreEqual(1, _entities.Length);
 
-        var record = entityManager.GetComponentData<Record>(_entities[0]);
+        var record = _entityManager.GetComponentData<Record>(_entities[0]);
         Assert.AreEqual(3, record.Value);
     }
 

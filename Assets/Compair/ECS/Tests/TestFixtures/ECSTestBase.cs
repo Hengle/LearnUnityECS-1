@@ -26,75 +26,75 @@ public class EmptySystem : JobComponentSystem
 
 public class ECSTestBase
 {
-    protected static World m_PreviousWorld;
-    protected static World World;
-    protected EntityManager entityManager;
-    protected EntityManager.EntityManagerDebug m_ManagerDebug;
+    protected static World _previousWorld;
+    protected static World _world;
+    protected EntityManager _entityManager;
+    protected EntityManager.EntityManagerDebug _managerDebug;
 
     protected int StressTestEntityCount = 1000;
     
     [SetUp]
     public virtual void Setup()
     {
-        m_PreviousWorld = World.Active;
-        World = World.Active = new World("Test World");
+        _previousWorld = World.Active;
+        _world = World.Active = new World("Test World");
 
-        entityManager = World.GetOrCreateManager<EntityManager>();
-        m_ManagerDebug = new EntityManager.EntityManagerDebug(entityManager);
+        _entityManager = _world.GetOrCreateManager<EntityManager>();
+        _managerDebug = new EntityManager.EntityManagerDebug(_entityManager);
     }
 
     [TearDown]
     public virtual void TearDown()
     {
-        if (entityManager != null)
+        if (_entityManager != null)
         {
-            World.Dispose();
-            World = null;
+            _world.Dispose();
+            _world = null;
 
-            World.Active = m_PreviousWorld;
-            m_PreviousWorld = null;
-            entityManager = null;
+            World.Active = _previousWorld;
+            _previousWorld = null;
+            _entityManager = null;
         }
     }
 
     public void AssertDoesNotExist(Entity entity)
     {
-        Assert.IsFalse(entityManager.HasComponent<EcsTestData>(entity));
-        Assert.IsFalse(entityManager.HasComponent<EcsTestData2>(entity));
-        Assert.IsFalse(entityManager.HasComponent<EcsTestData3>(entity));
-        Assert.IsFalse(entityManager.Exists(entity));
+        Assert.IsFalse(_entityManager.HasComponent<EcsTestData>(entity));
+        Assert.IsFalse(_entityManager.HasComponent<EcsTestData2>(entity));
+        Assert.IsFalse(_entityManager.HasComponent<EcsTestData3>(entity));
+        Assert.IsFalse(_entityManager.Exists(entity));
     }
 
     public void AssertComponentData(Entity entity, int index)
     {
-        Assert.IsTrue(entityManager.HasComponent<EcsTestData>(entity));
-        Assert.IsTrue(entityManager.HasComponent<EcsTestData2>(entity));
-        Assert.IsFalse(entityManager.HasComponent<EcsTestData3>(entity));
-        Assert.IsTrue(entityManager.Exists(entity));
+        Assert.IsTrue(_entityManager.HasComponent<EcsTestData>(entity));
+        Assert.IsTrue(_entityManager.HasComponent<EcsTestData2>(entity));
+        Assert.IsFalse(_entityManager.HasComponent<EcsTestData3>(entity));
+        Assert.IsTrue(_entityManager.Exists(entity));
 
-        Assert.AreEqual(-index, entityManager.GetComponentData<EcsTestData2>(entity).value0);
-        Assert.AreEqual(-index, entityManager.GetComponentData<EcsTestData2>(entity).value1);
-        Assert.AreEqual(index, entityManager.GetComponentData<EcsTestData>(entity).value);
+        Assert.AreEqual(-index, _entityManager.GetComponentData<EcsTestData2>(entity).value0);
+        Assert.AreEqual(-index, _entityManager.GetComponentData<EcsTestData2>(entity).value1);
+        Assert.AreEqual(index, _entityManager.GetComponentData<EcsTestData>(entity).value);
     }
 
     public Entity CreateEntityWithDefaultData(int index)
     {
-        var entity = entityManager.CreateEntity(typeof(EcsTestData), typeof(EcsTestData2));
+        var entity = _entityManager.CreateEntity(typeof(EcsTestData), typeof(EcsTestData2));
 
         // HasComponent & Exists setup correctly
-        Assert.IsTrue(entityManager.HasComponent<EcsTestData>(entity));
-        Assert.IsTrue(entityManager.HasComponent<EcsTestData2>(entity));
-        Assert.IsFalse(entityManager.HasComponent<EcsTestData3>(entity));
-        Assert.IsTrue(entityManager.Exists(entity));
+        Assert.IsTrue(_entityManager.HasComponent<EcsTestData>(entity));
+        Assert.IsTrue(_entityManager.HasComponent<EcsTestData2>(entity));
+        Assert.IsFalse(_entityManager.HasComponent<EcsTestData3>(entity));
+        Assert.IsTrue(_entityManager.Exists(entity));
 
         // Create must initialize values to zero
-        Assert.AreEqual(0, entityManager.GetComponentData<EcsTestData2>(entity).value0);
-        Assert.AreEqual(0, entityManager.GetComponentData<EcsTestData2>(entity).value1);
-        Assert.AreEqual(0, entityManager.GetComponentData<EcsTestData>(entity).value);
+        Assert.AreEqual(0, _entityManager.GetComponentData<EcsTestData2>(entity).value0);
+        Assert.AreEqual(0, _entityManager.GetComponentData<EcsTestData2>(entity).value1);
+        Assert.AreEqual(0, _entityManager.GetComponentData<EcsTestData>(entity).value);
 
         // Setup some non zero default values
-        entityManager.SetComponentData(entity, new EcsTestData2(-index));
-        entityManager.SetComponentData(entity, new EcsTestData(index));
+        _entityManager.SetComponentData(entity, new EcsTestData2(-index));
+        _entityManager.SetComponentData(entity, new EcsTestData(index));
 
         AssertComponentData(entity, index);
 

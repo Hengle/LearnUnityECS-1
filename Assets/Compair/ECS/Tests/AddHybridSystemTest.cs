@@ -3,7 +3,7 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class AdderHybridSystemTest : ECSTestBase
+public class AddHybridSystemTest : ECSTestBase
 {
     
     [Test]
@@ -11,11 +11,11 @@ public class AdderHybridSystemTest : ECSTestBase
     {
         var go = new GameObject("test", typeof(AdderWraper));
         
-        AdderHybridSystem system = World.GetOrCreateManager<AdderHybridSystem>();
+        AddHybridSystem system = _world.GetOrCreateManager<AddHybridSystem>();
         
         system.Update();
 
-        var adderGroup = entityManager.CreateComponentGroup(typeof(Adder));
+        var adderGroup = _entityManager.CreateComponentGroup(typeof(Adder));
         var adders = adderGroup.GetComponentDataArray<Adder>();
         Assert.AreEqual(1, adders.Length);
         Assert.AreEqual(1, adders[0].Value);

@@ -3,19 +3,19 @@ using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class AdderPureSystemTest : ECSTestBase
+public class AddPureSystemTest : ECSTestBase
 {
     
     [Test]
     public void AddOnceCorrect()
     {
-        entityManager.CreateEntity(typeof(Adder));
+        _entityManager.CreateEntity(typeof(Adder));
         
-        AddPureSystem system = World.GetOrCreateManager<AddPureSystem>();
+        AddPureSystem system = _world.GetOrCreateManager<AddPureSystem>();
         
         system.Update();
 
-        var adderGroup = entityManager.CreateComponentGroup(typeof(Adder));
+        var adderGroup = _entityManager.CreateComponentGroup(typeof(Adder));
         var adders = adderGroup.GetComponentDataArray<Adder>();
         Assert.AreEqual(1, adders.Length);
         Assert.AreEqual(1, adders[0].Value);

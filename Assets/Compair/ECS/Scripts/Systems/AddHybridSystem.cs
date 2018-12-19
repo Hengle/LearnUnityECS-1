@@ -5,7 +5,7 @@ public class AdderWraper : ComponentDataWrapper<Adder>
 {
 }
 
-public class AdderHybridSystem : ComponentSystem
+public class AddHybridSystem : ComponentSystem
 {
     public ComponentGroup AdderGroup;
 
